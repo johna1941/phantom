@@ -1,4 +1,4 @@
-#include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "PhantomDetectorConstruction.hh"
 #include "QBBC.hh"
 #include "PhantomActionInitialization.hh"
@@ -8,7 +8,7 @@
 int main(int argc,char** argv)
 {
   G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-  G4RunManager* runManager = new G4RunManager;
+  G4RunManager* runManager = new G4MTRunManager;
   runManager->SetUserInitialization(new PhantomDetectorConstruction);
   runManager->SetUserInitialization(new QBBC);
   runManager->SetUserInitialization(new PhantomActionInitialization);

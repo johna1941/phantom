@@ -12,7 +12,6 @@ public:
   PhantomPrimaryGeneratorAction();
   virtual ~PhantomPrimaryGeneratorAction();
 
-  // method from the base class
   virtual void GeneratePrimaries(G4Event*);
 
 private:
