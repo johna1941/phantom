@@ -1,5 +1,5 @@
 #include "PhantomActionInitialization.hh"
-//#include "PhantomPrimaryGeneratorAction.hh"
+#include "PhantomPrimaryGeneratorAction.hh"
 //#include "PhantomRunAction.hh"
 //#include "PhantomEventAction.hh"
 //#include "PhantomSteppingAction.hh"
