@@ -13,7 +13,6 @@
 #include "G4PhysicalConstants.hh"
 #include "G4VisAttributes.hh"
 
-
 PhantomDetectorConstruction::PhantomDetectorConstruction()
 { }
 
