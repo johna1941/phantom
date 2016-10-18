@@ -27,7 +27,7 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
 
   G4String name;
 
-  name = "world";
+  name = "World";
   G4VSolid* world = new G4Box(name,12.*cm,12.*cm,18.*cm);
   G4LogicalVolume* world_log = new G4LogicalVolume(world,world_mat,name);
   world_log->SetVisAttributes(G4VisAttributes::GetInvisible());
