@@ -6,6 +6,7 @@
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
+
 int main(int argc,char** argv)
 {
   // Do this first to capture all output
@@ -17,7 +18,6 @@ int main(int argc,char** argv)
 
   G4VModularPhysicsList* physicsList = new QBBC;
   physicsList->RegisterPhysics(new G4OpticalPhysics);
-  physicsList->SetVerboseLevel(1);
   runManager->SetUserInitialization(physicsList);
   
   runManager->SetUserInitialization(new PhantomActionInitialization);

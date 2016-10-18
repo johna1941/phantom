@@ -3,10 +3,8 @@
 #include "G4RunManager.hh"
 #include "G4NistManager.hh"
 #include "G4Box.hh"
-#include "G4Cons.hh"
 #include "G4Orb.hh"
-#include "G4Sphere.hh"
-#include "G4Trd.hh"
+#include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
@@ -193,6 +191,11 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
   G4LogicalVolume* scint_log = new G4LogicalVolume(scint,LS,name);
   new G4PVPlacement(G4Transform3D(),scint_log,name,world_log,false,0,checkOverlaps);
   new G4LogicalSkinSurface("scint_surface", scint_log, scint_surface);
+
+  name = "Fibre";
+  G4VSolid* fibre = new G4Tubs(name,0.,1.*cm,1.*mm,0.,twopi);
+  G4LogicalVolume* scint_fibre = new G4LogicalVolume(fibre,LS,name);
+  new G4PVPlacement(G4Translate3D(0.,0.,9.5*cm),scint_fibre,name,scint_log,false,0,checkOverlaps);
 
   return physWorld;
 }
