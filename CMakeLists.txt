@@ -44,21 +44,18 @@ target_link_libraries(phantom ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(phantom_SCRIPTS
-  examplephantom.in
-  examplephantom.out
-  init_vis.mac
-  run1.mac
-  run2.mac
   vis.mac
+  pretty.mac
+  gps.mac
   )
 
-# foreach(_script ${phantom_SCRIPTS})
-#  configure_file(
-#    ${PROJECT_SOURCE_DIR}/${_script}
-#    ${PROJECT_BINARY_DIR}/${_script}
-#    COPYONLY
-#    )
-# endforeach()
+foreach(_script ${phantom_SCRIPTS})
+  configure_file(
+    ${PROJECT_SOURCE_DIR}/${_script}
+    ${PROJECT_BINARY_DIR}/${_script}
+    COPYONLY
+  )
+endforeach()
 
 #----------------------------------------------------------------------------
 # For internal Geant4 use - but has no effect if you build this

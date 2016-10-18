@@ -1,0 +1,6 @@
+/run/initialize
+
+/vis/open OGL
+/vis/drawVolume
+
+/control/execute pretty.mac
