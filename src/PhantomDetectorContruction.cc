@@ -33,7 +33,7 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
   // Materials
   G4NistManager* nist = G4NistManager::Instance();
   G4Material* world_mat = nist->FindOrBuildMaterial("G4_AIR");
-  G4Material* env_mat = nist->FindOrBuildMaterial("G4_WATER");
+//  G4Material* env_mat = nist->FindOrBuildMaterial("G4_WATER");
   G4Element* C = nist->FindOrBuildElement("C");
   G4Element* H = nist->FindOrBuildElement("H");
   G4Element* N = nist->FindOrBuildElement("N");
