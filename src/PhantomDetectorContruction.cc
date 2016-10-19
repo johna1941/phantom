@@ -13,6 +13,9 @@
 #include "G4OpticalSurface.hh"
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalBorderSurface.hh"
+#include "PhantomSensitiveDetector.hh"
+#include "PhantomRunAction.hh"
+#include "G4SDManager.hh"
 
 PhantomDetectorConstruction::PhantomDetectorConstruction()
 { }
@@ -21,7 +24,7 @@ PhantomDetectorConstruction::~PhantomDetectorConstruction()
 { }
 
 G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
-{  
+{
   // Useful names
   G4String name, symbol;
   G4double density;
@@ -33,7 +36,7 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
   // Materials
   G4NistManager* nist = G4NistManager::Instance();
   G4Material* world_mat = nist->FindOrBuildMaterial("G4_AIR");
-//  G4Material* env_mat = nist->FindOrBuildMaterial("G4_WATER");
+  //  G4Material* env_mat = nist->FindOrBuildMaterial("G4_WATER");
   G4Element* C = nist->FindOrBuildElement("C");
   G4Element* H = nist->FindOrBuildElement("H");
   G4Element* N = nist->FindOrBuildElement("N");
@@ -194,8 +197,23 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
 
   name = "Fibre";
   G4VSolid* fibre = new G4Tubs(name,0.,1.*cm,1.*mm,0.,twopi);
-  G4LogicalVolume* scint_fibre = new G4LogicalVolume(fibre,LS,name);
-  new G4PVPlacement(G4Translate3D(0.,0.,9.5*cm),scint_fibre,name,scint_log,false,0,checkOverlaps);
+  fpFibre_log = new G4LogicalVolume(fibre,LS,name);
+  new G4PVPlacement(G4Translate3D(0.,0.,9.5*cm),fpFibre_log,name,scint_log,false,0,checkOverlaps);
 
   return physWorld;
 }
+
+void PhantomDetectorConstruction::ConstructSDandField()
+{
+  PhantomRunAction* pRunAction =
+  const_cast<PhantomRunAction*>
+  (static_cast<const PhantomRunAction*>
+   (G4RunManager::GetRunManager()->GetUserRunAction()));
+
+  G4VSensitiveDetector* fibreSD = new PhantomSensitiveDetector("Fibre",pRunAction);
+
+  G4SDManager* pSDman = G4SDManager::GetSDMpointer();
+  pSDman->AddNewDetector(fibreSD);
+  fpFibre_log->SetSensitiveDetector(fibreSD);
+}
+

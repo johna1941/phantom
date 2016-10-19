@@ -19,7 +19,7 @@ int main(int argc,char** argv)
   G4VModularPhysicsList* physicsList = new QBBC;
   physicsList->RegisterPhysics(new G4OpticalPhysics);
   runManager->SetUserInitialization(physicsList);
-  
+
   runManager->SetUserInitialization(new PhantomActionInitialization);
 
   G4VisManager* visManager = new G4VisExecutive;

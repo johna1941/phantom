@@ -5,14 +5,14 @@
 
 class PhantomActionInitialization : public G4VUserActionInitialization
 {
-  public:
-    PhantomActionInitialization();
-    virtual ~PhantomActionInitialization();
+public:
+  PhantomActionInitialization();
+  virtual ~PhantomActionInitialization();
 
-    virtual void BuildForMaster() const;
-    virtual void Build() const;
+  virtual void BuildForMaster() const;
+  virtual void Build() const;
 };
 
 #endif
 
-    
+
