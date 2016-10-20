@@ -3,8 +3,6 @@
 
 #include "G4UserRunAction.hh"
 
-#include "G4Accumulable.hh"
-
 class G4Run;
 
 class PhantomRunAction : public G4UserRunAction
@@ -16,10 +14,11 @@ public:
   virtual void BeginOfRunAction(const G4Run*);
   virtual void   EndOfRunAction(const G4Run*);
   
-  void IncrementPhotonCount() {fNPhotons += 1;}
+  void IncrementPhotonCount();
 
 private:
-  G4Accumulable<G4int> fNPhotons;
+  PhantomRunAction* fpMasterRunAction;
+  G4int fNPhotons;
 };
 
 #endif

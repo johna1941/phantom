@@ -1,14 +1,21 @@
 #include "PhantomRunAction.hh"
 
 #include "G4Run.hh"
-#include "G4AccumulableManager.hh"
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
+
+namespace {
+  PhantomRunAction* pMasterRunAction = 0;
+}
 
 PhantomRunAction::PhantomRunAction()
-: fNPhotons(0)
+: fpMasterRunAction(0)
+, fNPhotons(0)
 {
-  // Register accumulable to the accumulable manager
-  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
-  accumulableManager->RegisterAccumulable(fNPhotons);
+  if (G4Threading::IsMasterThread()) {
+    pMasterRunAction = this;
+  }
+  fpMasterRunAction = pMasterRunAction;
 }
 
 PhantomRunAction::~PhantomRunAction()
@@ -16,18 +23,27 @@ PhantomRunAction::~PhantomRunAction()
 
 void PhantomRunAction::BeginOfRunAction(const G4Run*)
 {
-  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
-  accumulableManager->Reset();
+  fNPhotons = 0;
+}
+
+namespace {
+  //Mutex to lock master when merging accumulables
+  G4Mutex mergeMutex = G4MUTEX_INITIALIZER;
+}
+
+void PhantomRunAction::IncrementPhotonCount()
+{
+  ++fNPhotons;
+  // Increment master counter too
+  G4AutoLock lock(&mergeMutex);
+  ++(fpMasterRunAction->fNPhotons);
+  lock.unlock();
 }
 
 void PhantomRunAction::EndOfRunAction(const G4Run* run)
 {
   G4int nofEvents = run->GetNumberOfEvent();
   if (nofEvents == 0) return;
-
-  // Merge accumulables
-  G4AccumulableManager* accumulableManager = G4AccumulableManager::Instance();
-  accumulableManager->Merge();
 
   G4String runType;
   if (IsMaster()) {
@@ -40,7 +56,7 @@ void PhantomRunAction::EndOfRunAction(const G4Run* run)
   << "\n----------------------End of " << runType << "------------------------"
   << "\n The run consists of " << nofEvents << " events."
   << "\n Number of photons reaching the sensitive detector: "
-  << fNPhotons.GetValue()
+  << fNPhotons
   << "\n------------------------------------------------------------"
   << G4endl;
 }
