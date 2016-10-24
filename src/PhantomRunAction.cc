@@ -14,6 +14,9 @@ PhantomRunAction::PhantomRunAction()
 {
   if (G4Threading::IsMasterThread()) {
     pMasterRunAction = this;
+  } else {
+    // Worker thread.  pMasterRunAction should have been initialised by now.
+    assert(pMasterRunAction);
   }
 }
 
@@ -45,7 +48,6 @@ void PhantomRunAction::EndOfRunAction(const G4Run* run)
     runType = "Global Run";
   } else {
     runType = "Local Run-";
-    assert (pMasterRunAction);
     // Merge to master counter
     G4AutoLock lock(&runActionMutex);
     pMasterRunAction->fNPhotons += fNPhotons;
