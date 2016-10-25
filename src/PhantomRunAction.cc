@@ -5,18 +5,16 @@
 #include "G4AutoLock.hh"
 #include <cassert>
 
-namespace {
-  PhantomRunAction* pMasterRunAction = 0;
-}
+PhantomRunAction* PhantomRunAction::fpMasterRunAction = 0;
 
 PhantomRunAction::PhantomRunAction()
 : fNPhotons(0)
 {
   if (G4Threading::IsMasterThread()) {
-    pMasterRunAction = this;
+    fpMasterRunAction = this;
   } else {
-    // Worker thread.  pMasterRunAction should have been initialised by now.
-    assert(pMasterRunAction);
+    // Worker thread.  fpMasterRunAction should have been initialised by now.
+    assert(fpMasterRunAction);
   }
 }
 
@@ -34,7 +32,6 @@ void PhantomRunAction::IncrementPhotonCount()
 }
 
 namespace {
-  //Mutex to lock master when merging accumulables
   G4Mutex runActionMutex = G4MUTEX_INITIALIZER;
 }
 
@@ -49,9 +46,8 @@ void PhantomRunAction::EndOfRunAction(const G4Run* run)
   } else {
     runType = "Local Run-";
     // Merge to master counter
-    G4AutoLock lock(&runActionMutex);
-    pMasterRunAction->fNPhotons += fNPhotons;
-    lock.unlock();
+    G4AutoLock lock(&runActionMutex);  // For duration of scope.
+    fpMasterRunAction->fNPhotons += fNPhotons;
   }
 
   G4cout

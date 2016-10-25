@@ -17,6 +17,7 @@ public:
   void IncrementPhotonCount();
 
 private:
+  static PhantomRunAction* fpMasterRunAction;
   G4int fNPhotons;
 };
 
