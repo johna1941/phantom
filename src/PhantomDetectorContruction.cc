@@ -164,7 +164,8 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
     2.313*eV, 2.260*eV, 2.210*eV, 2.162*eV,
     2.116*eV, 2.072*eV };
 
-  G4double scale = 0.01;
+//  G4double scale = 0.01;
+  G4double scale = 1.;
   G4double reflectivity[] =
    {scale*0.7000, scale*0.8000, scale*0.8700, scale*0.8990,
     scale*0.9200, scale*0.9340, scale*0.9450, scale*0.9550,

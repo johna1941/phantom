@@ -23,8 +23,7 @@ G4bool PhantomSensitiveDetector::ProcessHits(G4Step* step,
   G4StepPoint* Fred = step->GetPostStepPoint();
   G4ThreeVector John = Fred->GetMomentumDirection();
   G4ThreeVector z_axis (0, 0, 1);
-  //if (John * z_axis > 0.92388) {
-  if (John.x > 0.5) {
+  if (John * z_axis > 0.92388) {
     fpRunAction->IncrementPhotonCount();
   }
 
