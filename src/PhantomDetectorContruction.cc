@@ -80,13 +80,13 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
     3.353*eV, 3.446*eV, 3.545*eV, 3.649*eV,
     3.760*eV, 3.877*eV, 4.002*eV, 4.136*eV }; //32
   G4double refractiveIndex[] =
-  { 1.3435, 1.344,  1.3445, 1.345,  1.3455, //5
-    1.346,  1.3465, 1.347,  1.3475, 1.348, //10
-    1.3485, 1.3492, 1.35,   1.3505, 1.351, //15
-    1.3518, 1.3522, 1.3530, 1.3535, 1.354, //20
-    1.3545, 1.355,  1.3555, 1.356,  1.3568, //25
-    1.3572, 1.358,  1.3585, 1.359,  1.3595, //30
-    1.36,   1.3608}; // 32
+  { 1.3435, 1.3440,  1.3445, 1.3450, 1.3455, //5
+    1.3460, 1.3465,  1.3470, 1.3475, 1.3480, //10
+    1.3485, 1.3492,  1.3500, 1.3505, 1.3510, //15
+    1.3518, 1.3522,  1.3530, 1.3535, 1.3540, //20
+    1.3545, 1.3550,  1.3555, 1.3560, 1.3568, //25
+    1.3572, 1.3580,  1.3585, 1.3590, 1.3595, //30
+    1.3600, 1.3608}; // 32
   // Values from EJ301-em.xls data table. To be incorporated...
   G4double photonEnergySF[] =
   { 3.108*eV, 3.089*eV, 3.069*eV, 3.051*eV,
@@ -118,8 +118,8 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
     0.554, 0.490, 0.438, 0.401,
     0.364, 0.312, 0.273, 0.238,
     0.208, 0.183, 0.158, 0.136,
-    0.119, 0.104, 0.092, 0.08,
-    0.07 }; //57
+    0.119, 0.104, 0.092, 0.080,
+    0.070 }; //57
   G4double absorption[] =  // Quoted to be 2.5-3m bulk absorption, we'll assume worst case.
   { 2.5*m, 2.5*m, 2.5*m, 2.5*m, 2.5*m, //5
     2.5*m, 2.5*m, 2.5*m, 2.5*m, 2.5*m, //10
@@ -149,27 +149,30 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
   scint_mpt->AddConstProperty("SCINTILLATIONYIELD",12000/MeV);
   scint_mpt->AddConstProperty("RESOLUTIONSCALE",1.0);
   scint_mpt->AddConstProperty("FASTTIMECONSTANT", 3.2*ns); // Given to be 3.2ns in EJ-301 PDF
-  //  scint_mpt->AddConstProperty("SLOWTIMECONSTANT",32.3*ns); // "First three components; 3.2, 32.3, 270...?"
-  //  scint_mpt->AddConstProperty("YIELDRATIO",0.8); // Relative strength of the fast vs. slow, i.e. 80% scintillations are fast.
+  //scint_mpt->AddConstProperty("SLOWTIMECONSTANT",32.3*ns); // "First three components; 3.2, 32.3, 270...?"
+  //scint_mpt->AddConstProperty("YIELDRATIO",0.8); // Relative strength of the fast vs. slow, i.e. 80% scintillations are fast.
   G4cout << "Scint G4MaterialPropertiesTable\n"; scint_mpt->DumpTable();
   // Associate material properties table with the liquid scintillator material
   LS->SetMaterialPropertiesTable(scint_mpt);
 
   // Optical properties of the surface of the scintillator
   G4double photonEnergyRe[] =
-  {   3.315*eV, 3.261*eV, 3.208*eV, 3.157*eV,
+  { 3.315*eV, 3.261*eV, 3.208*eV, 3.157*eV,
     3.108*eV, 3.060*eV, 3.014*eV, 2.925*eV,
     2.841*eV, 2.763*eV, 2.688*eV, 2.617*eV,
     2.550*eV, 2.486*eV, 2.426*eV, 2.368*eV,
     2.313*eV, 2.260*eV, 2.210*eV, 2.162*eV,
     2.116*eV, 2.072*eV };
+
+  G4double scale = 0.01;
   G4double reflectivity[] =
-  {   0.7, 0.8, 0.87, 0.899,
-    0.92, 0.934, 0.945, 0.955,
-    0.9575, 0.96, 0.962, 0.9625,
-    0.964, 0.964, 0.964, 0.965,
-    0.965, 0.965, 0.965, 0.9645,
-    0.963, 0.962 };
+   {scale*0.7000, scale*0.8000, scale*0.8700, scale*0.8990,
+    scale*0.9200, scale*0.9340, scale*0.9450, scale*0.9550,
+    scale*0.9575, scale*0.9600, scale*0.9620, scale*0.9625,
+    scale*0.9640, scale*0.9640, scale*0.9640, scale*0.9650,
+    scale*0.9650, scale*0.9650, scale*0.9650, scale*0.9645,
+    scale*0.9630, scale*0.9620 };
+
   G4OpticalSurface* scint_surface = new G4OpticalSurface("scint-surface");
   scint_surface->SetType(dielectric_dielectric); // If both surfaces have refractive properties added, this will actually calculate reflection for us
   scint_surface->SetFinish(groundfrontpainted);
