@@ -209,15 +209,15 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
 
 void PhantomDetectorConstruction::ConstructSDandField()
 {
-  PhantomRunAction* pRunAction =
-  const_cast<PhantomRunAction*>
-  (static_cast<const PhantomRunAction*>
-   (G4RunManager::GetRunManager()->GetUserRunAction()));
-
-  G4VSensitiveDetector* fibreSD = new PhantomSensitiveDetector("Fibre",pRunAction);
-
-  G4SDManager* pSDman = G4SDManager::GetSDMpointer();
-  pSDman->AddNewDetector(fibreSD);
-  fpFibre_log->SetSensitiveDetector(fibreSD);
+//  PhantomRunAction* pRunAction =
+//  const_cast<PhantomRunAction*>
+//  (static_cast<const PhantomRunAction*>
+//   (G4RunManager::GetRunManager()->GetUserRunAction()));
+//
+//  G4VSensitiveDetector* fibreSD = new PhantomSensitiveDetector("Fibre",pRunAction);
+//
+//  G4SDManager* pSDman = G4SDManager::GetSDMpointer();
+//  pSDman->AddNewDetector(fibreSD);
+//  fpFibre_log->SetSensitiveDetector(fibreSD);
 }
 
