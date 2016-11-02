@@ -18,6 +18,7 @@ void PhantomActionInitialization::BuildForMaster() const
 void PhantomActionInitialization::Build() const
 {
   SetUserAction(new PhantomPrimaryGeneratorAction);
-  SetUserAction(new PhantomRunAction);
-  SetUserAction(new PhantomSteppingAction);
+  PhantomRunAction* pRunAction = new PhantomRunAction;
+  SetUserAction(pRunAction);
+  SetUserAction(new PhantomSteppingAction(pRunAction));
 }

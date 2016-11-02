@@ -15,8 +15,11 @@ public:
   virtual G4VPhysicalVolume* Construct();
   void ConstructSDandField();
 
+  G4VPhysicalVolume* GetFibrePhys() const {return fpFibre_phys;}
+
 private:
   G4LogicalVolume* fpFibre_log;
+  G4VPhysicalVolume* fpFibre_phys;
 };
 
 #endif

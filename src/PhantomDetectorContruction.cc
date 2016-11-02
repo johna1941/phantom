@@ -18,6 +18,8 @@
 #include "G4SDManager.hh"
 
 PhantomDetectorConstruction::PhantomDetectorConstruction()
+: fpFibre_log(nullptr)
+, fpFibre_phys(nullptr)
 { }
 
 PhantomDetectorConstruction::~PhantomDetectorConstruction()
@@ -202,7 +204,8 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
   name = "Fibre";
   G4VSolid* fibre = new G4Tubs(name,0.,1.*cm,1.*mm,0.,twopi);
   fpFibre_log = new G4LogicalVolume(fibre,LS,name);
-  new G4PVPlacement(G4Translate3D(0.,0.,9.5*cm),fpFibre_log,name,scint_log,false,0,checkOverlaps);
+  fpFibre_phys = new G4PVPlacement
+  (G4Translate3D(0.,0.,9.5*cm),fpFibre_log,name,scint_log,false,0,checkOverlaps);
 
   return physWorld;
 }

@@ -1,24 +1,32 @@
 #include "PhantomSteppingAction.hh"
 
 #include "PhantomRunAction.hh"
+#include "PhantomDetectorConstruction.hh"
 #include "G4Track.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4RunManager.hh"
 
-PhantomSteppingAction::PhantomSteppingAction()
-{}
+namespace {
+  G4VPhysicalVolume* pFibre_phys = nullptr;
+}
+
+PhantomSteppingAction::PhantomSteppingAction(PhantomRunAction* runAction)
+: fpRunAction(runAction)
+{
+  pFibre_phys =
+  static_cast<const PhantomDetectorConstruction*>
+  (G4RunManager::GetRunManager()->GetUserDetectorConstruction())->
+  GetFibrePhys();
+}
 
 PhantomSteppingAction::~PhantomSteppingAction()
 {}
 
 void PhantomSteppingAction::UserSteppingAction(const G4Step* step)
 {
-//  G4cout << "PhantomSteppingAction::UserSteppingAction" << G4endl;
-
   // Does it enter the fibre?
   G4StepPoint* postStepPoint = step->GetPostStepPoint();
-  if (postStepPoint->GetPhysicalVolume()->GetName() != "Fibre") return;
-  // Change the above to be a test on a pointer!!!
+  if (postStepPoint->GetPhysicalVolume() != pFibre_phys) return;
 
   // Is it an optical photon?
   G4Track* track = step->GetTrack();
@@ -28,18 +36,14 @@ void PhantomSteppingAction::UserSteppingAction(const G4Step* step)
   // It's an optical photon entering the fibre
   G4StepPoint* preStepPoint = step->GetPreStepPoint();
   const G4ThreeVector& incomingDirection = preStepPoint->GetMomentumDirection();
-  G4ThreeVector z_axis (0, 0, 1);
+  G4ThreeVector z_axis (0., 0., 1.);
   if (incomingDirection * z_axis > 0.92388) {
-    PhantomRunAction* pRunAction =
-    const_cast<PhantomRunAction*>
-    (static_cast<const PhantomRunAction*>
-     (G4RunManager::GetRunManager()->GetUserRunAction()));
-    pRunAction->IncrementPhotonCount();
+    fpRunAction->IncrementPhotonCount();
     // Ask the tracking manager to kill it!!!
     track->SetTrackStatus(fStopAndKill);
   } else {
     // What happens to photons not in acceptance cone?  Do they reflect off?
-    // Or should we kill these too?  Yes...for now
+    // Or should we kill these too?  Yes...kill for now
     track->SetTrackStatus(fStopAndKill);
   }
 

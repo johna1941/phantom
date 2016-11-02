@@ -3,12 +3,16 @@
 
 #include "G4UserSteppingAction.hh"
 
+class PhantomRunAction;
+
 class PhantomSteppingAction : public G4UserSteppingAction
 {
 public:
-  PhantomSteppingAction();
+  PhantomSteppingAction(PhantomRunAction*);
   virtual ~PhantomSteppingAction();
   virtual void UserSteppingAction(const G4Step*);
+private:
+  PhantomRunAction* fpRunAction;
 };
 
 #endif
