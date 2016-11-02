@@ -28,11 +28,6 @@ void PhantomRunAction::BeginOfRunAction(const G4Run*)
   fNPhotons = 0;
 }
 
-void PhantomRunAction::IncrementPhotonCount()
-{
-  ++fNPhotons;
-}
-
 namespace {
   G4Mutex runActionMutex = G4MUTEX_INITIALIZER;
 }
