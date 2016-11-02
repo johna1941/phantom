@@ -15,6 +15,7 @@ PhantomSensitiveDetector::PhantomSensitiveDetector
 G4bool PhantomSensitiveDetector::ProcessHits(G4Step* step,
                                              G4TouchableHistory*)
 {
+  G4cout << "PhantomSensitiveDetector::ProcessHits" << G4endl;
   G4Track* track = step->GetTrack();
   const G4ParticleDefinition* pPDef = track->GetParticleDefinition();
   if (pPDef != G4OpticalPhoton::Definition()) {return true;}
