@@ -8,7 +8,6 @@ class PhantomSteppingAction : public G4UserSteppingAction
 public:
   PhantomSteppingAction();
   virtual ~PhantomSteppingAction();
-
   virtual void UserSteppingAction(const G4Step*);
 };
 
