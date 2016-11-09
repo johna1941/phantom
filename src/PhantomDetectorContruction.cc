@@ -18,8 +18,12 @@
 #include "G4SDManager.hh"
 
 PhantomDetectorConstruction::PhantomDetectorConstruction()
-: fpFibre_log(nullptr)
-, fpFibre_phys(nullptr)
+//: fpFibre_log(nullptr)
+//, fpFibre_phys(nullptr)
+: fpFibre_log(0)
+, fpFibre_phys(0)
+, fscint_log(0)
+, fscint_phys(0)
 { }
 
 PhantomDetectorConstruction::~PhantomDetectorConstruction()
@@ -166,8 +170,7 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
     2.313*eV, 2.260*eV, 2.210*eV, 2.162*eV,
     2.116*eV, 2.072*eV };
 
-//  G4double scale = 0.01;
-  G4double scale = 1.;
+  G4double scale = 1.0;
   G4double reflectivity[] =
    {scale*0.7000, scale*0.8000, scale*0.8700, scale*0.8990,
     scale*0.9200, scale*0.9340, scale*0.9450, scale*0.9550,
@@ -196,16 +199,22 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
   G4VPhysicalVolume* physWorld = new G4PVPlacement(G4Transform3D(),world_log,name,0,false,0);
 
   name = "Orb";
-  G4VSolid* scint = new G4Orb(name, 10.*cm);
-  G4LogicalVolume* scint_log = new G4LogicalVolume(scint,LS,name);
-  new G4PVPlacement(G4Transform3D(),scint_log,name,world_log,false,0,checkOverlaps);
-  new G4LogicalSkinSurface("scint_surface", scint_log, scint_surface);
+  G4VSolid* orb = new G4Orb(name, 2.5*cm);
+  G4LogicalVolume* orb_log = new G4LogicalVolume(orb,ABS,name);
+  new G4PVPlacement(G4Transform3D(),orb_log,name,world_log,false,0,checkOverlaps);
+
+  name = "Scint";
+  G4VSolid* scint = new G4Orb(name, 2.0*cm);
+  fscint_log = new G4LogicalVolume(scint,LS,name);
+  fscint_phys = new G4PVPlacement(G4Transform3D(),fscint_log,name,orb_log,false,0,checkOverlaps);
+  new G4LogicalSkinSurface("scint_surface", fscint_log, scint_surface);
 
   name = "Fibre";
-  G4VSolid* fibre = new G4Tubs(name,0.,1.*cm,1.*mm,0.,twopi);
+  G4VSolid* fibre = new G4Tubs(name,0.,2.5*mm,1.*um,0.,twopi);
   fpFibre_log = new G4LogicalVolume(fibre,LS,name);
   fpFibre_phys = new G4PVPlacement
-  (G4Translate3D(0.,0.,9.5*cm),fpFibre_log,name,scint_log,false,0,checkOverlaps);
+  (G4Translate3D(0.,0.,1.984*cm),fpFibre_log,name,fscint_log,false,0,checkOverlaps);
+
 
   return physWorld;
 }

@@ -16,10 +16,13 @@ public:
   void ConstructSDandField();
 
   G4VPhysicalVolume* GetFibrePhys() const {return fpFibre_phys;}
+  G4VPhysicalVolume* GetScintPhys() const {return fscint_phys;}
 
 private:
   G4LogicalVolume* fpFibre_log;
   G4VPhysicalVolume* fpFibre_phys;
+  G4VPhysicalVolume* fscint_phys;
+  G4LogicalVolume* fscint_log;
 };
 
 #endif

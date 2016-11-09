@@ -11,6 +11,7 @@ PhantomRunAction* PhantomRunAction::fpMasterRunAction = 0;
 
 PhantomRunAction::PhantomRunAction()
 : fNPhotons(0)
+, foutside(0)
 {
   if (G4Threading::IsWorkerThread()) {
     // Worker thread.  fpMasterRunAction should have been initialised by now.
@@ -26,6 +27,7 @@ PhantomRunAction::~PhantomRunAction()
 void PhantomRunAction::BeginOfRunAction(const G4Run*)
 {
   fNPhotons = 0;
+  foutside = 0;
 }
 
 namespace {
@@ -50,9 +52,13 @@ void PhantomRunAction::EndOfRunAction(const G4Run* run)
 
     //Print to file: "std::ios::app" adds data onto the end of file
     std::ofstream output("photon_sensitivity.txt", std::ios::app); 
-    output << fNPhotons << std::endl;
+    //If the node is triggered to be outside (outside = 1) photon count is -1
+    if (GetOutside() == 0){
+      output << fNPhotons << " " << GetOutside() << std::endl;
+    } else {
+      output << "-1" << std::endl;
+    }
     output.close();
-
   }
 
   G4cout

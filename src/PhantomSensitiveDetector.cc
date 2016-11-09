@@ -15,21 +15,20 @@ PhantomSensitiveDetector::PhantomSensitiveDetector
 G4bool PhantomSensitiveDetector::ProcessHits(G4Step* step,
                                              G4TouchableHistory*)
 {
-  G4cout << "PhantomSensitiveDetector::ProcessHits" << G4endl;
+
+/*  G4cout << "PhantomSensitiveDetector::ProcessHits" << G4endl;
   G4Track* track = step->GetTrack();
   const G4ParticleDefinition* pPDef = track->GetParticleDefinition();
   if (pPDef != G4OpticalPhoton::Definition()) {return true;}
+  
+  G4ThreeVector direction = track->GetMomentumDirection();
 
-  // It's an optical photon - count it.
-  G4StepPoint* Fred = step->GetPostStepPoint();
-  G4ThreeVector John = Fred->GetMomentumDirection();
-  G4ThreeVector z_axis (0, 0, 1);
-  if (John * z_axis > 0.92388) {
+  if (direction.z() > 0.92388) {
     fpRunAction->IncrementPhotonCount();
   }
 
   // Ask the tracking manager to kill it!!!
   track->SetTrackStatus(fStopAndKill);
-
+*/
   return true;
 }

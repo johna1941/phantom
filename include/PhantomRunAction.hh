@@ -15,10 +15,13 @@ public:
   virtual void   EndOfRunAction(const G4Run*);
   
   void IncrementPhotonCount() {++fNPhotons;}
+  void SetOutside() {foutside = 1;}
+  G4int GetOutside() {return foutside;}
 
 private:
   static PhantomRunAction* fpMasterRunAction;
   G4int fNPhotons;
+  G4int foutside;
 };
 
 #endif
