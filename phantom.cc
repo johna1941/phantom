@@ -1,7 +1,6 @@
 #include "G4MTRunManager.hh"
 #include "PhantomDetectorConstruction.hh"
-#include "QBBC.hh"
-#include "G4OpticalPhysics.hh"
+#include "OpNovicePhysicsList.hh"
 #include "PhantomActionInitialization.hh"
 #include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
@@ -16,9 +15,7 @@ int main(int argc,char** argv)
 
   runManager->SetUserInitialization(new PhantomDetectorConstruction);
 
-  G4VModularPhysicsList* physicsList = new QBBC;
-  physicsList->RegisterPhysics(new G4OpticalPhysics);
-  runManager->SetUserInitialization(physicsList);
+  runManager->SetUserInitialization(new OpNovicePhysicsList);
 
   runManager->SetUserInitialization(new PhantomActionInitialization);
 
