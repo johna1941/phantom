@@ -193,12 +193,14 @@ G4VPhysicalVolume* PhantomDetectorConstruction::Construct()
   G4VSolid* world = new G4Box(name,12.*cm,12.*cm,18.*cm);
   G4LogicalVolume* world_log = new G4LogicalVolume(world,world_mat,name);
   world_log->SetVisAttributes(G4VisAttributes::GetInvisible());
-  G4VPhysicalVolume* physWorld = new G4PVPlacement(G4Transform3D(),world_log,name,0,false,0);
+  G4VPhysicalVolume* physWorld = new G4PVPlacement
+  (G4Transform3D(),world_log,name,0,false,0);
 
   name = "Orb";
   G4VSolid* scint = new G4Orb(name, 10.*cm);
   G4LogicalVolume* scint_log = new G4LogicalVolume(scint,LS,name);
-  new G4PVPlacement(G4Transform3D(),scint_log,name,world_log,false,0,checkOverlaps);
+  fpScint_phys = new G4PVPlacement
+  (G4Transform3D(),scint_log,name,world_log,false,0,checkOverlaps);
   new G4LogicalSkinSurface("scint_surface", scint_log, scint_surface);
 
   name = "Fibre";
